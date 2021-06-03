@@ -11,24 +11,18 @@ function SideNav() {
         <div className="sb-sidenav-menu">
           <div className="nav">
             <div className="sb-sidenav-menu-heading">Core</div>
-            <Link to='/' >
-              <a className="nav-link">
+            <Link to="/" className="nav-link">
                 <div className="sb-nav-link-icon">
                   <i className="fas fa-tachometer-alt"></i>
                 </div>
                 Dashboard
-              </a>
             </Link>
             <div className="sb-sidenav-menu-heading">Interface</div>
-            <Link to="/pages">
-              <a className="nav-link">
-                Pages
-              </a>
+            <Link to="/pages" className="nav-link">
+              Pages
             </Link>
-            <Link to="/posts">
-              <a className="nav-link">
-                Posts
-              </a>
+            <Link to="/posts" className="nav-link">
+              Posts
             </Link>
           </div>
         </div>

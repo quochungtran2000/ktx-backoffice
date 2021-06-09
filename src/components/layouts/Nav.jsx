@@ -5,7 +5,7 @@ function Nav() {
   return (
     <nav className="sb-topnav navbar navbar-expand navbar-dark bg-dark">
       <Link to={'/'} className="navbar-brand" href="index.html">
-        Start Bootstrap
+        Ktx Backoffice
       </Link> 
       <button
         className="btn btn-link btn-sm order-1 order-lg-0"
@@ -36,7 +36,7 @@ function Nav() {
           <Link
             className="nav-link dropdown-toggle"
             id="userDropdown"
-            to={'/'}
+            // to={'/'}
             role="button"
             data-toggle="dropdown"
             aria-haspopup="true"

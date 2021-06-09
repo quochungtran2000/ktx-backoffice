@@ -1,48 +1,152 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import Paper from "@material-ui/core/Paper";
 import Layout from "../components/layouts";
-import Table from "../components/Table";
+import { postApi } from "../api";
+import { useLocation } from "react-router";
+import noimage from '../assets/images/noimage.jpeg'
+
+import queryString from "query-string";
+import { toast } from "react-toastify";
+const useStyles = makeStyles({
+  root: {
+    width: "100%",
+  },
+  container: {
+    // maxHeight: 440,
+  },
+});
 
 function Post() {
+  const location = useLocation();
+  const classes = useStyles();
+  const [data, setdata] = useState({});
+  const [loading, setLoading] = useState(false);
+  console.log(location, loading);
+
+  useEffect(() => {
+    setLoading(true);
+    const fetchData = async () => {
+      const postData = await postApi.getAll(
+        queryString.parse(location?.search?.replace("?", ""))
+      );
+      setdata(postData);
+      setLoading(false);
+    };
+    fetchData();
+  }, [location?.search]);
+
+  console.log(`data`, data);
+  const onDelete = (id) => {
+    postApi.deleteById(id).then(res => {
+      toast.success(res);
+      window.location.reload(); 
+    })
+  }
+  const onClick = () => {
+    console.log('asd')
+    toast.success('Click')
+  }
+
   return (
     <Layout>
-      <Table title={"Posts"}>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Position</th>
-            <th>Office</th>
-            <th>Age</th>
-            <th>Start date</th>
-            <th>Salary</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Tiger Nixon</td>
-            <td>System Architect</td>
-            <td>Edinburgh</td>
-            <td>61</td>
-            <td>2011/04/25</td>
-            <td>$320,800</td>
-          </tr>
-          <tr>
-            <td>Garrett Winters</td>
-            <td>Accountant</td>
-            <td>Tokyo</td>
-            <td>63</td>
-            <td>2011/07/25</td>
-            <td>$170,750</td>
-          </tr>
-          <tr>
-            <td>Ashton Cox</td>
-            <td>Junior Technical Author</td>
-            <td>San Francisco</td>
-            <td>66</td>
-            <td>2009/01/12</td>
-            <td>$86,000</td>
-          </tr>
-        </tbody>
-      </Table>
+      <div className="p-4">
+        <Paper className={classes.root}>
+          <TableContainer className={classes.container}>
+            <Table stickyHeader aria-label="sticky table">
+              <TableHead>
+                <TableRow>
+                  <TableCell colSpan={1}>Id</TableCell>
+                  <TableCell colSpan={1} align="left">
+                    Img
+                  </TableCell>
+                  <TableCell colSpan={3} align="left">
+                    Title
+                  </TableCell>
+                  <TableCell colSpan={1} align="right">
+                    Category
+                  </TableCell>
+                  <TableCell colSpan={1} align="right">
+                    Location
+                  </TableCell>
+                  <TableCell colSpan={1} align="right">
+                    Price
+                  </TableCell>
+                  <TableCell colSpan={1} align="right">
+                    Author
+                  </TableCell>
+                  <TableCell colSpan={1} align="right">
+                    Content
+                  </TableCell>
+                  <TableCell colSpan={1} align="center">
+                    Update
+                  </TableCell>
+                  <TableCell colSpan={1} align="center">
+                    Delete
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {data?.post?.map((post, index) => {
+                  return (
+                    <TableRow key={index}>
+                      <TableCell colSpan={1}>{post?.id}</TableCell>
+                      <TableCell colSpan={1} align="left">
+                        <img
+                          style={{ maxWidth: "50px" }}
+                          src={post?.img_url || noimage}
+                          title="Paella dish"
+                          alt={post?.title}
+                        />
+                        {/* {post?.img_url} */}
+                      </TableCell>
+                      <TableCell colSpan={3} align="left">
+                        {post?.title}
+                      </TableCell>
+                      <TableCell colSpan={1} align="right">
+                        {post?.category?.name}
+                      </TableCell>
+                      <TableCell colSpan={1} align="right">
+                        {post?.location?.name}
+                      </TableCell>
+                      <TableCell colSpan={1} align="right">
+                        {post?.price}
+                      </TableCell>
+                      <TableCell colSpan={1} align="right">
+                        {post?.user?.name}
+                      </TableCell>
+                      <TableCell
+                        colSpan={1}
+                        align="right"
+                        style={{
+                          maxWidth: 50,
+                          whiteSpace: "nowrap",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                        }}
+                      >
+                        {post?.content}
+                      </TableCell>
+                      <TableCell colSpan={1} align="center">
+                        <i className="fas fa-tools" onClick={() => onClick()}/>
+                      </TableCell>
+                      <TableCell colSpan={1} align="center">
+                        <i className="fa fa-trash" onClick={() => onDelete(post?.id)} />
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Paper>
+      </div>
     </Layout>
   );
 }

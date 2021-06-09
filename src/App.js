@@ -9,6 +9,7 @@ import PageDetail from './pages/PageDetail';
 import Category from './pages/Category';
 import Location from './pages/Location';
 import User from './pages/User';
+import Banner from './pages/Banner';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route exact path="/pages" component={Page} />
           <Route exact path="/category" component={Category} />
           <Route exact path="/location" component={Location} />
+          <Route exact path="/banner" component={Banner} />
           <Route exact path="/user" component={User} />
           <Route path="/pages/:id" component={PageDetail} />
         </Switch>

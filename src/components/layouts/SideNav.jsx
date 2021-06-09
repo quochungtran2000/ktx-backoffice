@@ -33,6 +33,9 @@ function SideNav() {
             <Link to="/category" className="nav-link">
               Category
             </Link>
+            <Link to="/banner" className="nav-link">
+              Banner
+            </Link>
 
           </div>
         </div>

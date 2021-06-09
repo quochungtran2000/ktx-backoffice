@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Layout from "../components/layouts";
-import { locationApi, categoryApi, userApi, postApi } from "../api";
+import { locationApi, categoryApi, userApi, postApi, bannerApi } from "../api";
 import { useFetch } from "../hook";
 import noimage from "../assets/images/noimage.jpeg";
 function Dashboard() {
@@ -18,7 +18,12 @@ function Dashboard() {
 
   const { data: postData, loading: postLoading } = useFetch(postApi.getAll, {});
 
-  console.log(locationLoading, categoryLoading, userLoading, postLoading)
+  const { data: bannerData, loading: bannerLoading } = useFetch(
+    bannerApi.getAll,
+    {}
+  );
+
+  console.log(locationLoading, categoryLoading, userLoading, postLoading, bannerLoading);
   return (
     <Layout>
       <div className="container-fluid">
@@ -86,6 +91,55 @@ function Dashboard() {
             </div>
           </div>
         </div>
+
+        <div className="card mb-4">
+          <div className="card-header">
+            <i className="fas fa-table mr-1"></i>
+            Banner
+          </div>
+          <div className="card-body">
+            <div className="table-responsive">
+              <table
+                className="table table-bordered"
+                id="dataTable"
+                width="100%"
+                cellSpacing="0"
+              >
+                <thead>
+                  <tr>
+                    <th>id</th>
+                    <th>img</th>
+                    <th>image_url</th>
+                    <th>link</th>
+                    <th>description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {bannerData?.map((banner, index) => (
+                    <tr key={index}>
+                      <td>{banner?.id}</td>
+                      <td>
+                        {
+                          <img
+                            style={{ maxWidth: "100px" }}
+                            src={banner?.image_url}
+                            alt={banner?.description}
+                          />
+                        }
+                      </td>
+                      <td>
+                      {banner?.image_url}
+                      </td>
+                      <td>{banner?.link}</td>
+                      <td>{banner?.description}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
         <div className="card mb-4">
           <div className="card-header">
             <i className="fas fa-table mr-1"></i>

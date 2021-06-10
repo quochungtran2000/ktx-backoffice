@@ -11,6 +11,7 @@ import Layout from "../components/layouts";
 import { bannerApi } from "../api";
 import { useFetch } from "../hook";
 import { toast } from "react-toastify";
+import { Button } from "@material-ui/core";
 
 const useStyles = makeStyles({
   table: {
@@ -24,56 +25,74 @@ function Banner() {
     {}
   );
 
-  console.log(bannerLoading)
+  console.log(bannerLoading);
 
   const classes = useStyles();
 
   const onDelete = (id) => {
-    bannerApi.deleteById(id).then(res => {
+    bannerApi.deleteById(id).then((res) => {
       toast.success(res);
-      window.location.reload(); 
-    })
-  }
+      window.location.reload();
+    });
+  };
 
   return (
     <Layout>
-      <div className="p-4">
-        <TableContainer component={Paper}>
-          <Table className={classes.table} aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell>Id</TableCell>
-                <TableCell align="left">Image</TableCell>
-                {/* <TableCell align="right">Image_Url</TableCell> */}
-                <TableCell align="right">Link</TableCell>
-                <TableCell align="right">Description</TableCell>
-                <TableCell align="center">Update</TableCell>
-                <TableCell align="center">Delete</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {bannerData?.map((banner, index) => (
-                <TableRow key={index}>
-                  <TableCell>{banner?.id}</TableCell>
-                  <TableCell>
-                    <img style={{maxWidth: '100px'}} src={banner?.image_url} alt={banner?.description} />
-                  </TableCell>
-                  {/* <TableCell component="th" scope="row" align="left">
+      <div className="card mb-4">
+        <div className="card-header card-custom">
+          <div>
+            <i className="fas fa-table mr-1"></i>
+            Banner
+          </div>
+          <div>
+            <Button>Create</Button>
+          </div>
+        </div>
+        <div className="card-body">
+          <TableContainer component={Paper}>
+            <Table className={classes.table} aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Id</TableCell>
+                  <TableCell align="left">Image</TableCell>
+                  {/* <TableCell align="right">Image_Url</TableCell> */}
+                  <TableCell align="right">Link</TableCell>
+                  <TableCell align="right">Description</TableCell>
+                  <TableCell align="center">Update</TableCell>
+                  <TableCell align="center">Delete</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {bannerData?.map((banner, index) => (
+                  <TableRow key={index}>
+                    <TableCell>{banner?.id}</TableCell>
+                    <TableCell>
+                      <img
+                        style={{ maxWidth: "100px" }}
+                        src={banner?.image_url}
+                        alt={banner?.description}
+                      />
+                    </TableCell>
+                    {/* <TableCell component="th" scope="row" align="left">
                     {banner?.image_url}
                   </TableCell> */}
-                  <TableCell align="right">{banner?.link}</TableCell>
-                  <TableCell align="right">{banner?.description}</TableCell>
-                  <TableCell align="center">
-                    <i className="fas fa-tools" />
-                  </TableCell>
-                  <TableCell align="center">
-                    <i className="fa fa-trash" onClick={()=> onDelete(banner?.id)}/>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+                    <TableCell align="right">{banner?.link}</TableCell>
+                    <TableCell align="right">{banner?.description}</TableCell>
+                    <TableCell align="center">
+                      <i className="fas fa-tools" />
+                    </TableCell>
+                    <TableCell align="center">
+                      <i
+                        className="fa fa-trash"
+                        onClick={() => onDelete(banner?.id)}
+                      />
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </div>
       </div>
     </Layout>
   );

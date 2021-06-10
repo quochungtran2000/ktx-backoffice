@@ -11,6 +11,7 @@ import Layout from "../components/layouts";
 import { categoryApi } from "../api";
 import { useFetch } from "../hook";
 import { toast } from "react-toastify";
+import { Button } from "@material-ui/core";
 
 const useStyles = makeStyles({
   table: {
@@ -23,49 +24,63 @@ function Category() {
     categoryApi.getAll,
     {}
   );
-    console.log(categoryLoading)
+  console.log(categoryLoading);
   const classes = useStyles();
 
   const onDelete = (id) => {
-    categoryApi.deleteById(id).then(res => {
+    categoryApi.deleteById(id).then((res) => {
       toast.success(res);
-      window.location.reload(); 
-    })
-  }
+      window.location.reload();
+    });
+  };
 
   return (
     <Layout>
-      <div className="p-4">
-        <TableContainer component={Paper}>
-          <Table className={classes.table} aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell>Id</TableCell>
-                <TableCell align="left">Name</TableCell>
-                <TableCell align="right">Classes</TableCell>
-                <TableCell align="right">Update</TableCell>
-                <TableCell align="right">Delete</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {categoryData?.map((category, index) => (
-                <TableRow key={index}>
-                  <TableCell>{category?.category_id}</TableCell>
-                  <TableCell component="th" scope="row" align="left">
-                    {category?.name}
-                  </TableCell>
-                  <TableCell align="right">{category?.classes}</TableCell>
-                  <TableCell align="right">
-                    <i className="fas fa-tools" />
-                  </TableCell>
-                  <TableCell align="right">
-                    <i className="fa fa-trash" onClick={() => onDelete(category?.category_id)} />
-                  </TableCell>
+      <div className="card mb-4">
+        <div className="card-header card-custom">
+          <div>
+            <i className="fas fa-table mr-1"></i>
+            Category
+          </div>
+          <div>
+            <Button>Create</Button>
+          </div>
+        </div>
+        <div className="card-body">
+          <TableContainer component={Paper}>
+            <Table className={classes.table} aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Id</TableCell>
+                  <TableCell align="left">Name</TableCell>
+                  <TableCell align="right">Classes</TableCell>
+                  <TableCell align="right">Update</TableCell>
+                  <TableCell align="right">Delete</TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+              </TableHead>
+              <TableBody>
+                {categoryData?.map((category, index) => (
+                  <TableRow key={index}>
+                    <TableCell>{category?.category_id}</TableCell>
+                    <TableCell component="th" scope="row" align="left">
+                      {category?.name}
+                    </TableCell>
+                    <TableCell align="right">{category?.classes}</TableCell>
+                    <TableCell align="right">
+                      <i className="fas fa-tools" />
+                    </TableCell>
+                    <TableCell align="right">
+                      <i
+                        className="fa fa-trash"
+                        onClick={() => onDelete(category?.category_id)}
+                      />
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </div>
       </div>
     </Layout>
   );

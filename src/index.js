@@ -4,10 +4,13 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import { UserProvider } from "./context/userContext";
 
 ReactDOM.render(
   <React.StrictMode>
+    <UserProvider>
     <App />
+    </UserProvider>
     <ToastContainer />
   </React.StrictMode>,
   document.getElementById('root')

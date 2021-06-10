@@ -23,6 +23,10 @@ const userApi = {
   deleteById: (id) => {
     const url = `${apiUrl}/user/signup`
     return axiosClient.delete(url)
+  },
+  login: (data) => {
+    const url = `${apiUrl}/authenticate`
+    return axiosClient.post(url, data)
   }
 }
 

@@ -11,6 +11,7 @@ import Layout from "../components/layouts";
 import { locationApi } from "../api";
 import { useFetch } from "../hook";
 import { toast } from "react-toastify";
+import { Button } from "@material-ui/core";
 
 const useStyles = makeStyles({
   table: {
@@ -24,50 +25,64 @@ function Location() {
     {}
   );
 
-  console.log(locationLoading)
+  console.log(locationLoading);
 
   const classes = useStyles();
 
   const onDelete = (id) => {
-    locationApi.deleteById(id).then(res => {
+    locationApi.deleteById(id).then((res) => {
       toast.success(res);
-      window.location.reload(); 
-    })
-  }
+      window.location.reload();
+    });
+  };
 
   return (
     <Layout>
-      <div className="p-4">
-        <TableContainer component={Paper}>
-          <Table className={classes.table} aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell>Id</TableCell>
-                <TableCell align="left">Name</TableCell>
-                <TableCell align="right">Address</TableCell>
-                <TableCell align="right">Update</TableCell>
-                <TableCell align="right">Delete</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {locationData?.map((location, index) => (
-                <TableRow key={index}>
-                  <TableCell>{location?.location_id}</TableCell>
-                  <TableCell component="th" scope="row" align="left">
-                    {location?.name}
-                  </TableCell>
-                  <TableCell align="right">{location?.address}</TableCell>
-                  <TableCell align="right">
-                    <i className="fas fa-tools" />
-                  </TableCell>
-                  <TableCell align="right">
-                    <i className="fa fa-trash" onClick={()=> onDelete(location?.location_id)}/>
-                  </TableCell>
+      <div className="card mb-4">
+        <div className="card-header card-custom">
+          <div>
+            <i className="fas fa-table mr-1"></i>
+            Location
+          </div>
+          <div>
+            <Button>Create</Button>
+          </div>
+        </div>
+        <div className="card-body">
+          <TableContainer component={Paper}>
+            <Table className={classes.table} aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Id</TableCell>
+                  <TableCell align="left">Name</TableCell>
+                  <TableCell align="right">Address</TableCell>
+                  <TableCell align="right">Update</TableCell>
+                  <TableCell align="right">Delete</TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+              </TableHead>
+              <TableBody>
+                {locationData?.map((location, index) => (
+                  <TableRow key={index}>
+                    <TableCell>{location?.location_id}</TableCell>
+                    <TableCell component="th" scope="row" align="left">
+                      {location?.name}
+                    </TableCell>
+                    <TableCell align="right">{location?.address}</TableCell>
+                    <TableCell align="right">
+                      <i className="fas fa-tools" />
+                    </TableCell>
+                    <TableCell align="right">
+                      <i
+                        className="fa fa-trash"
+                        onClick={() => onDelete(location?.location_id)}
+                      />
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </div>
       </div>
     </Layout>
   );

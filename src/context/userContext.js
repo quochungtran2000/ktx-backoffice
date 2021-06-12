@@ -1,7 +1,8 @@
 import { createContext, useState, useEffect, useContext } from "react";
+import { set } from "react-hook-form";
 // import { Redirect } from "react-router";
 import userApi from "../api/userApi";
-import { useHistory } from 'react-router-dom';
+// import { useHistory } from 'react-router-dom';
 
 export const UserContext = createContext(null);
 
@@ -10,18 +11,15 @@ export const useUser = () => useContext(UserContext);
 export const UserProvider = (props) => {
   const [token, setToken] = useState(localStorage.getItem("token") || null);
   const [user, setUser] = useState(null);
-  const history = useHistory()
+  // const history = useHistory()
 
   console.log(user);
   const logout = () => {
     localStorage.removeItem("token");
     setToken(null);
-    history.push("/")
+    // history.push("/login")
   };
   useEffect(() => {
-    if (!token) {
-      return setUser(null);
-    }
     const fetchUser = async () => {
       const data = await userApi.getUser({
         headers: {
@@ -31,7 +29,7 @@ export const UserProvider = (props) => {
       console.log(data);
       setUser(data);
     };
-    fetchUser();
+    !token ? set(null) : fetchUser();
   }, [token]);
 
   return (
@@ -40,7 +38,7 @@ export const UserProvider = (props) => {
         user,
         setToken,
         token,
-        logout
+        logout,
       }}
     >
       {props.children}

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -12,6 +12,7 @@ import { categoryApi } from "../api";
 import { useFetch } from "../hook";
 import { toast } from "react-toastify";
 import { Button } from "@material-ui/core";
+import { CreateCategory, UpdateCategory } from "../components/Form";
 
 const useStyles = makeStyles({
   table: {
@@ -19,19 +20,42 @@ const useStyles = makeStyles({
   },
 });
 
-function Category() {
-  const { data: categoryData, loading: categoryLoading } = useFetch(
-    categoryApi.getAll,
-    {}
-  );
+function Category(props) {
+  const {
+    data: categoryData,
+    loading: categoryLoading,
+    reload,
+  } = useFetch(categoryApi.getAll, {});
   console.log(categoryLoading);
   const classes = useStyles();
 
   const onDelete = (id) => {
     categoryApi.deleteById(id).then((res) => {
       toast.success(res);
-      window.location.reload();
+      reload();
     });
+  };
+
+  const [createOpen, setCreateOpen] = useState(false);
+  const [updateOpen, setUpdateOpen] = useState(false);
+  const [select, setSelect] = useState({});
+  const onOpen = {
+    create: () => {
+      setCreateOpen(true);
+    },
+    update: (category) => {
+      setSelect(category);
+      setUpdateOpen(true);
+    },
+  };
+
+  const onClose = {
+    create: () => {
+      setCreateOpen(false);
+    },
+    update: () => {
+      setUpdateOpen(false);
+    },
   };
 
   return (
@@ -43,7 +67,12 @@ function Category() {
             Category
           </div>
           <div>
-            <Button>Create</Button>
+            <Button onClick={onOpen.create}>Create</Button>
+            <CreateCategory
+              open={createOpen}
+              onClose={onClose.create}
+              reload={reload}
+            />
           </div>
         </div>
         <div className="card-body">
@@ -67,7 +96,7 @@ function Category() {
                     </TableCell>
                     <TableCell align="right">{category?.classes}</TableCell>
                     <TableCell align="right">
-                      <i className="fas fa-tools" />
+                      <i className="fas fa-tools" onClick={() => onOpen.update(category)} />
                     </TableCell>
                     <TableCell align="right">
                       <i
@@ -82,6 +111,12 @@ function Category() {
           </TableContainer>
         </div>
       </div>
+      <UpdateCategory
+        data={select}
+        open={updateOpen}
+        onClose={onClose.update}
+        reload={reload}
+      />
     </Layout>
   );
 }

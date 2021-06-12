@@ -63,7 +63,7 @@ export default function CreateStaticPage() {
                     {...register("type")}
                   >
                     <option value="NEWS" defaultValue>NEWS</option>
-                    <option value="NEWS">NEWS</option>
+                    <option value="communicate">COMMNICATE</option>
                     <option value="CONTACT">CONTACT</option>
                   </select>
                 </div>

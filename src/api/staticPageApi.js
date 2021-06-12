@@ -6,9 +6,9 @@ const staticPageApi = {
     const url = `${apiUrl}/staticpage`;
     return axiosClient.get(url,  params );
   },
-  deleteById: (id) => {
-    const url = `${apiUrl}/location/${id}`;
-    return axiosClient.delete(url);
+  deleteById: (id,config) => {
+    const url = `${apiUrl}/staticpage/${id}`;
+    return axiosClient.delete(url, config);
   },
   createStaticPage: (data, config) => {
     const url = `${apiUrl}/staticpage`;

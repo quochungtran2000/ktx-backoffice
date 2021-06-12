@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -12,6 +12,7 @@ import { locationApi } from "../api";
 import { useFetch } from "../hook";
 import { toast } from "react-toastify";
 import { Button } from "@material-ui/core";
+import { CreateLocation, UpdateLocation} from '../components/Form'
 
 const useStyles = makeStyles({
   table: {
@@ -20,7 +21,7 @@ const useStyles = makeStyles({
 });
 
 function Location() {
-  const { data: locationData, loading: locationLoading } = useFetch(
+  const { data: locationData, loading: locationLoading, reload } = useFetch(
     locationApi.getAll,
     {}
   );
@@ -32,8 +33,30 @@ function Location() {
   const onDelete = (id) => {
     locationApi.deleteById(id).then((res) => {
       toast.success(res);
-      window.location.reload();
+      reload();
     });
+  };
+
+  const [createOpen, setCreateOpen] = useState(false);
+  const [updateOpen, setUpdateOpen] = useState(false);
+  const [select, setSelect] = useState({});
+  const onOpen = {
+    create: () => {
+      setCreateOpen(true);
+    },
+    update: (category) => {
+      setSelect(category);
+      setUpdateOpen(true);
+    },
+  };
+
+  const onClose = {
+    create: () => {
+      setCreateOpen(false);
+    },
+    update: () => {
+      setUpdateOpen(false);
+    },
   };
 
   return (
@@ -45,7 +68,12 @@ function Location() {
             Location
           </div>
           <div>
-            <Button>Create</Button>
+            <Button onClick={onOpen.create}>Create</Button>
+            <CreateLocation
+              open={createOpen}
+              onClose={onClose.create}
+              reload={reload}
+            />
           </div>
         </div>
         <div className="card-body">
@@ -69,7 +97,7 @@ function Location() {
                     </TableCell>
                     <TableCell align="right">{location?.address}</TableCell>
                     <TableCell align="right">
-                      <i className="fas fa-tools" />
+                      <i className="fas fa-tools" onClick={() => onOpen.update(location)} />
                     </TableCell>
                     <TableCell align="right">
                       <i
@@ -84,6 +112,12 @@ function Location() {
           </TableContainer>
         </div>
       </div>
+      <UpdateLocation
+        data={select}
+        open={updateOpen}
+        onClose={onClose.update}
+        reload={reload}
+      />
     </Layout>
   );
 }

@@ -15,6 +15,7 @@ import { useUser } from "../context/userContext";
 import { Button } from "@material-ui/core";
 import { Link } from "react-router-dom";
 
+import { toast } from "react-toastify";
 const useStyles = makeStyles({
   table: {
     minWidth: 650,
@@ -23,19 +24,29 @@ const useStyles = makeStyles({
 
 function Page() {
   const { token } = useUser();
-  const { data: pages, loading: pageLoading } = useFetch(staticPageApi.getAll, {
+  const {
+    data: pages,
+    loading: pageLoading,
+    reload,
+  } = useFetch(staticPageApi.getAll, {
     headers: {
       authorization: `Bearer ${token}`,
     },
   });
 
-  console.log(pageLoading)
-  // const onDelete = (id) => {
-  //   categoryApi.deleteById(id).then(res => {
-  //     toast.success(res);
-  //     window.location.reload();
-  //   })
-  // }
+  console.log(pageLoading);
+  const onDelete = (id) => {
+    staticPageApi
+      .deleteById(id, {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        toast.success(res);
+        reload();
+      });
+  };
 
   const classes = useStyles();
 
@@ -48,7 +59,9 @@ function Page() {
             Page
           </div>
           <div>
-            <Button><Link to="/pages/create">Create</Link></Button>
+            <Button>
+              <Link to="/pages/create">Create</Link>
+            </Button>
           </div>
         </div>
         <div className="card-body">
@@ -84,7 +97,7 @@ function Page() {
                     <TableCell align="center">
                       <i
                         className="fa fa-trash"
-                        // onClick={() => onDelete(location?.location_id)}
+                        onClick={() => onDelete(page?.id)}
                       />
                     </TableCell>
                   </TableRow>

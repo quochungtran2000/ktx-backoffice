@@ -14,7 +14,6 @@ import noimage from "../assets/images/noimage.jpeg";
 
 import queryString from "query-string";
 import { toast } from "react-toastify";
-import { Button } from "@material-ui/core";
 const useStyles = makeStyles({
   root: {
     width: "100%",
@@ -30,29 +29,27 @@ function Post() {
   const [data, setdata] = useState({});
   const [loading, setLoading] = useState(false);
   console.log(location, loading);
+  const fetchData = async () => {
+    const postData = await postApi.getAll(
+      queryString.parse(location?.search?.replace("?", ""))
+    );
+    setdata(postData);
+    setLoading(false);
+  };
 
+  const reload = () => fetchData()
   useEffect(() => {
     setLoading(true);
-    const fetchData = async () => {
-      const postData = await postApi.getAll(
-        queryString.parse(location?.search?.replace("?", ""))
-      );
-      setdata(postData);
-      setLoading(false);
-    };
-    fetchData();
+    return fetchData();
+    // eslint-disable-next-line
   }, [location?.search]);
 
   console.log(`data`, data);
   const onDelete = (id) => {
     postApi.deleteById(id).then((res) => {
       toast.success(res);
-      window.location.reload();
+      reload();
     });
-  };
-  const onClick = () => {
-    console.log("asd");
-    toast.success("Click");
   };
 
   return (
@@ -62,9 +59,6 @@ function Post() {
           <div>
             <i className="fas fa-table mr-1"></i>
             Post
-          </div>
-          <div>
-            <Button>Create</Button>
           </div>
         </div>
         <div className="card-body">
@@ -94,9 +88,6 @@ function Post() {
                     </TableCell>
                     <TableCell colSpan={1} align="right">
                       Content
-                    </TableCell>
-                    <TableCell colSpan={1} align="center">
-                      Update
                     </TableCell>
                     <TableCell colSpan={1} align="center">
                       Delete
@@ -143,12 +134,6 @@ function Post() {
                           }}
                         >
                           {post?.content}
-                        </TableCell>
-                        <TableCell colSpan={1} align="center">
-                          <i
-                            className="fas fa-tools"
-                            onClick={() => onClick()}
-                          />
                         </TableCell>
                         <TableCell colSpan={1} align="center">
                           <i

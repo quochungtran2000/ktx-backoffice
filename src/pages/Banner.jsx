@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -11,8 +11,11 @@ import Layout from "../components/layouts";
 import { bannerApi } from "../api";
 import { useFetch } from "../hook";
 import { toast } from "react-toastify";
+
+import noimage from "../assets/images/noimage.jpeg";
 import { Button } from "@material-ui/core";
 
+import { CreateBanner, UpdateBanner } from "../components/Form";
 const useStyles = makeStyles({
   table: {
     minWidth: 650,
@@ -20,7 +23,7 @@ const useStyles = makeStyles({
 });
 
 function Banner() {
-  const { data: bannerData, loading: bannerLoading } = useFetch(
+  const { data: bannerData, loading: bannerLoading, reload } = useFetch(
     bannerApi.getAll,
     {}
   );
@@ -32,8 +35,29 @@ function Banner() {
   const onDelete = (id) => {
     bannerApi.deleteById(id).then((res) => {
       toast.success(res);
-      window.location.reload();
+      reload();
     });
+  };
+  const [createOpen, setCreateOpen] = useState(false);
+  const [updateOpen, setUpdateOpen] = useState(false);
+  const [select, setSelect] = useState({});
+  const onOpen = {
+    create: () => {
+      setCreateOpen(true);
+    },
+    update: (category) => {
+      setSelect(category);
+      setUpdateOpen(true);
+    },
+  };
+
+  const onClose = {
+    create: () => {
+      setCreateOpen(false);
+    },
+    update: () => {
+      setUpdateOpen(false);
+    },
   };
 
   return (
@@ -45,7 +69,12 @@ function Banner() {
             Banner
           </div>
           <div>
-            <Button>Create</Button>
+          <Button onClick={onOpen.create}>Create</Button>
+            <CreateBanner
+              open={createOpen}
+              onClose={onClose.create}
+              reload={reload}
+            />
           </div>
         </div>
         <div className="card-body">
@@ -69,7 +98,7 @@ function Banner() {
                     <TableCell>
                       <img
                         style={{ maxWidth: "100px" }}
-                        src={banner?.image_url}
+                        src={banner?.image_url || noimage}
                         alt={banner?.description}
                       />
                     </TableCell>
@@ -79,7 +108,7 @@ function Banner() {
                     <TableCell align="right">{banner?.link}</TableCell>
                     <TableCell align="right">{banner?.description}</TableCell>
                     <TableCell align="center">
-                      <i className="fas fa-tools" />
+                      <i className="fas fa-tools" onClick={() => onOpen.update(banner)} />
                     </TableCell>
                     <TableCell align="center">
                       <i
@@ -94,6 +123,12 @@ function Banner() {
           </TableContainer>
         </div>
       </div>
+      <UpdateBanner
+        data={select}
+        open={updateOpen}
+        onClose={onClose.update}
+        reload={reload}
+      />
     </Layout>
   );
 }

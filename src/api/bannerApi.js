@@ -9,6 +9,14 @@ const bannerApi = {
   deleteById: (id) => {
     const url = `${apiUrl}/banner/${id}`;
     return axiosClient.delete(url);
+  },
+  create: (data, option) => {
+    const url = `${apiUrl}/banner`;
+    return axiosClient.post(url,data, option);
+  },
+  update : (data, option) => {
+    const url = `${apiUrl}/banner`;
+    return axiosClient.put(url,data, option);
   }
 }
 

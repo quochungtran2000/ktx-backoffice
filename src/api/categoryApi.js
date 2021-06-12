@@ -9,6 +9,14 @@ const categoryApi = {
   deleteById: (id) => {
     const url = `${apiUrl}/category/${id}`;
     return axiosClient.delete(url);
+  },
+  create: (data) => {
+    const url = `${apiUrl}/category`;
+    return axiosClient.post(url,data);
+  },
+  update : (data) => {
+    const url = `${apiUrl}/category`;
+    return axiosClient.put(url,data);
   }
 }
 

@@ -13,7 +13,6 @@ import { toast } from "react-toastify";
 import queryString from "query-string";
 import { useLocation } from "react-router";
 import noimage from "../assets/images/noimage.jpeg";
-import { Button } from "@material-ui/core";
 
 const useStyles = makeStyles({
   table: {
@@ -27,7 +26,7 @@ function User() {
   const onDelete = (id) => {
     userApi.deleteById(id).then((res) => {
       toast.success(res);
-      window.location.reload();
+      reload();
     });
   };
 
@@ -35,17 +34,21 @@ function User() {
   const [data, setdata] = useState({});
   const [loading, setLoading] = useState(false);
   console.log(location, loading);
+  const fetchData = async () => {
+    const postData = await userApi.getAll(
+      queryString.parse(location?.search?.replace("?", ""))
+    );
+    setdata(postData);
+    setLoading(false);
+  };
+
+  const reload = () => fetchData();
 
   useEffect(() => {
     setLoading(true);
-    const fetchData = async () => {
-      const postData = await userApi.getAll(
-        queryString.parse(location?.search?.replace("?", ""))
-      );
-      setdata(postData);
-      setLoading(false);
-    };
-    fetchData();
+   
+    return fetchData();
+    // eslint-disable-next-line
   }, [location?.search]);
 
   return (
@@ -55,9 +58,6 @@ function User() {
           <div>
             <i className="fas fa-table mr-1"></i>
             User
-          </div>
-          <div>
-            <Button>Create</Button>
           </div>
         </div>
         <div className="card-body">
@@ -72,7 +72,6 @@ function User() {
                   <TableCell align="right">Email</TableCell>
                   <TableCell align="right">Phone</TableCell>
                   <TableCell align="right">Address</TableCell>
-                  <TableCell align="center">Update</TableCell>
                   <TableCell align="center">Delete</TableCell>
                 </TableRow>
               </TableHead>
@@ -101,9 +100,6 @@ function User() {
                       {user?.phone}
                     </TableCell>
                     <TableCell align="right">{user?.address}</TableCell>
-                    <TableCell align="center">
-                      <i className="fas fa-tools" />
-                    </TableCell>
                     <TableCell align="center">
                       <i
                         className="fa fa-trash"

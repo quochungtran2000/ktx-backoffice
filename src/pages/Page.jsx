@@ -89,10 +89,12 @@ function Page() {
                     <TableCell align="left">{page?.description}</TableCell>
                     <TableCell align="right">{page?.content}</TableCell>
                     <TableCell align="center">
-                      <i
-                        className="fa fa-trash"
-                        // onClick={() => onDelete(location?.location_id)}
-                      />
+                      <Link to={`/pages/update/${page?.type}`}>
+                        <i
+                          className="fas fa-tools"
+                          // onClick={() => onDelete(location?.location_id)}
+                        />
+                      </Link>
                     </TableCell>
                     <TableCell align="center">
                       <i

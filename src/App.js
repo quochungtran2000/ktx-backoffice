@@ -13,6 +13,7 @@ import Banner from "./pages/Banner";
 import { useUser } from "./context/userContext";
 import Login from "./pages/Login";
 import CreateStaticPage from "./pages/CreateStaticPage";
+import UpdateStaticPage from "./pages/UpdateStaticPage";
 
 function App() {
   const { user } = useUser();
@@ -50,6 +51,10 @@ function App() {
           <Route exact path="/pages/create"  >
             {/* <Login /> */}
             <CreateStaticPage />
+          </Route>
+          <Route path="/pages/update/:type"  >
+            {/* <Login /> */}
+            <UpdateStaticPage />
           </Route>
           <Route exact path="/login"  >
             {/* <Login /> */}

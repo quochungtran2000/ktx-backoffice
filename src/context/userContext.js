@@ -1,8 +1,5 @@
 import { createContext, useState, useEffect, useContext } from "react";
-import { set } from "react-hook-form";
-// import { Redirect } from "react-router";
 import userApi from "../api/userApi";
-// import { useHistory } from 'react-router-dom';
 
 export const UserContext = createContext(null);
 
@@ -29,7 +26,7 @@ export const UserProvider = (props) => {
       console.log(data);
       setUser(data);
     };
-    !token ? set(null) : fetchUser();
+    fetchUser();
   }, [token]);
 
   return (
